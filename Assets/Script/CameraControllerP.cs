@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraControllerP : MonoBehaviour
 {
     internal enum updateMethod
     {
@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private updateMethod updateDemo;
 
-
+    private GameObject atachedVehicle;
     public GameObject cameraLookObject;
     private PlayerInput controllerReference;
     [Range(0, 20)] public float smothTime = 5;
@@ -21,8 +21,8 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        controllerReference = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInput>();
-        cameraLookObject = GameObject.FindGameObjectWithTag("Player").transform.Find("camera lookAt").gameObject;
+        controllerReference = GameObject.FindGameObjectWithTag("Player2").GetComponent<PlayerInput>();
+        cameraLookObject = GameObject.FindGameObjectWithTag("Player2").transform.Find("camera lookAt").gameObject;
     }
 
     private void FixedUpdate()
@@ -30,7 +30,6 @@ public class CameraController : MonoBehaviour
         if (updateDemo == updateMethod.fixedUpdate)
         {
             cameraBehaviour();
-            
         }
     }
 
@@ -42,5 +41,4 @@ public class CameraController : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, cameraLookObject.transform.position, ref velocity, smothTime * Time.deltaTime);
         transform.LookAt(cameraLookObject.transform);
     }
-
 }

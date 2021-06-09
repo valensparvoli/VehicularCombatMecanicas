@@ -5,73 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class CarController : MonoBehaviour
 {
-    public float Speed;
-    public float TurnSpeed;
-    public float gravityMultiplier; 
-    int score;
 
-    private Rigidbody rb;
-    void Start()
+    private void OnCollisionEnter(Collision collision)
     {
-        rb = GetComponent<Rigidbody>();
-    }
-
-
-    private void Update()
-    {
-        if (score == 11)
+        if (collision.collider.CompareTag("Arco"))
         {
-            Debug.Log("Ganaste");
-        }
-    }
-    void FixedUpdate()
-    {
-        Move();
-        Turn();
-        Fall();
-    }
-
-    void Move()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            rb.AddRelativeForce(new Vector3(Vector3.forward.x,0,Vector3.forward.z) * Speed * 10);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            rb.AddRelativeForce(new Vector3(Vector3.forward.x, 0, Vector3.forward.z) * -Speed * 10);
-        }
-        Vector3 LocalVelocity = transform.InverseTransformDirection(rb.velocity);
-        LocalVelocity.x = 0;
-        rb.velocity = transform.TransformDirection(LocalVelocity);
-    }
-
-    void Turn()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            rb.AddTorque(Vector3.up * TurnSpeed * 10);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            rb.AddTorque(-Vector3.up * TurnSpeed * 10);
-        }
-    }
-
-    void Fall()
-    {
-        rb.AddForce(Vector3.down * gravityMultiplier * 10);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Arco"))
-        {
-            score += 1;
-            Destroy(other.gameObject);
+            PlayerInputP1.scorePlayer1 += 1;
+            Destroy(collision.gameObject);
+            PlayerInput.cantidadArcos -= 1;
         }
 
-        if (other.CompareTag("AumentoVelocidad"))
+        if (collision.collider.CompareTag("AumentoVelocidad"))
         {
             StartCoroutine("PowerUpVelocidad");
         }
@@ -79,8 +23,8 @@ public class CarController : MonoBehaviour
 
     IEnumerator PowerUpVelocidad()
     {
-        Speed += 2;
+        PlayerInputP1.SpeedPlayer1 += 0.5f;
         yield return new WaitForSeconds(1f);
-        Speed -= 2;
+        PlayerInputP1.SpeedPlayer1 -= 0.5f;
     }
 }
